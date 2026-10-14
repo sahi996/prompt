@@ -153,3 +153,7 @@ def _register_error_handlers(app):
     def server_error(e):
         app.logger.error("500 error: %s", e)
         return render_template("errors/500.html"), 500
+
+
+with app.app_context():
+    db.create_all()
