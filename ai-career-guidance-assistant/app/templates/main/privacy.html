@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy — AI Career Guidance Assistant{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <div class="section-badge">Legal</div>
+    <h1 class="section-title mt-2">Privacy Policy</h1>
+    <p class="text-muted mt-2">Last updated: January 2025</p>
+  </div>
+</div>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="glass-card">
+        {% for heading, body in [
+          ("1. Information We Collect", "When you register, we collect your username, email address, and a securely hashed password. We also store career preferences, skill analyses, roadmap progress, resume drafts, and job application records that you choose to enter. We do not collect payment information."),
+          ("2. How We Use Your Information", "Your information is used solely to provide the platform's features — to display your dashboard, save your progress, and personalise recommendations. We do not sell, rent, or share your personal data with third parties."),
+          ("3. Data Security", "Passwords are hashed using bcrypt before storage and are never stored in plain text. Sessions use secure, HTTP-only cookies. Access to your private data is enforced by server-side authentication checks."),
+          ("4. AI API Usage", "If an AI API key is configured, your assessment responses may be sent to the AI provider to generate career explanations. No personally identifying information (name, email) is sent. Responses are not stored beyond your session unless you explicitly save them."),
+          ("5. Cookies", "We use a single session cookie to keep you logged in. We do not use tracking, advertising, or analytics cookies."),
+          ("6. Data Retention", "You may delete your account at any time from your profile settings. All associated data will be permanently removed."),
+          ("7. Children's Privacy", "This platform is intended for users aged 13 and above. We do not knowingly collect data from children under 13."),
+          ("8. Changes to This Policy", "We may update this policy. Changes will be noted by updating the date at the top of this page."),
+          ("9. Contact", "For privacy-related questions, use the Contact page."),
+        ] %}
+        <h5 class="fw-bold mt-4 mb-2">{{ heading }}</h5>
+        <p class="text-muted">{{ body }}</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

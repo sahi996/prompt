@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Terms of Service — AI Career Guidance Assistant{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <div class="section-badge">Legal</div>
+    <h1 class="section-title mt-2">Terms of Service</h1>
+    <p class="text-muted mt-2">Last updated: January 2025</p>
+  </div>
+</div>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="glass-card">
+        {% for heading, body in [
+          ("1. Acceptance of Terms", "By using this platform, you agree to these terms. If you do not agree, please do not use the platform."),
+          ("2. Nature of the Service", "AI Career Guidance Assistant is a free educational tool designed to help students and graduates explore career options. It is a student project and not a professional career counselling service."),
+          ("3. No Employment Guarantee", "Nothing on this platform constitutes a guarantee of employment, admission, or any specific career outcome. Career recommendations are for informational and educational purposes only and may not reflect the current job market in your location or field."),
+          ("4. Accuracy of Information", "Career information, skill requirements, and salary ranges are provided in good faith but may become outdated. Always verify information with current job postings and professional advisors."),
+          ("5. User Responsibilities", "You are responsible for the accuracy of information you enter. Do not enter false information about qualifications, employment history, or certifications. Do not misuse the platform to generate misleading resume content."),
+          ("6. Account Security", "You are responsible for keeping your account credentials confidential. If you suspect unauthorised access, change your password immediately and contact us."),
+          ("7. Intellectual Property", "The platform's code, design, and content are protected. You may not reproduce, distribute, or create derivative works without permission."),
+          ("8. Limitation of Liability", "This platform is provided 'as is'. The developers make no warranties about the accuracy, reliability, or suitability of the platform for any purpose. We are not liable for any loss or damage arising from your use of the platform."),
+          ("9. Modifications", "We reserve the right to modify or discontinue the platform at any time without notice. We may update these terms by posting a new version on this page."),
+          ("10. Governing Law", "These terms are governed by the applicable laws of the jurisdiction in which this project is hosted."),
+        ] %}
+        <h5 class="fw-bold mt-4 mb-2">{{ heading }}</h5>
+        <p class="text-muted">{{ body }}</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

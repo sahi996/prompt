@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if draft else 'New' }} Resume Draft — Dashboard{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h1 class="section-title">{{ 'Edit' if draft else 'New' }} Resume Draft</h1>
+    <p class="text-muted mt-1">
+      This is a draft tool. Review everything carefully before using it in a real application.
+      Do not include qualifications or experience you do not have.
+    </p>
+  </div>
+</div>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="glass-card">
+        <form method="POST" novalidate>
+          {{ form.hidden_tag() }}
+          <div class="row g-3">
+            <div class="col-sm-6">
+              {{ form.title.label(class="form-label") }}
+              {{ form.title(class="form-control" + (" is-invalid" if form.title.errors else ""), placeholder="e.g. Python Developer Resume") }}
+              {% for e in form.title.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="col-sm-6">
+              {{ form.target_career.label(class="form-label") }}
+              {{ form.target_career(class="form-control", placeholder="e.g. Backend Python Developer") }}
+            </div>
+            <div class="col-12">
+              {{ form.objective.label(class="form-label") }}
+              {{ form.objective(class="form-control", rows="3",
+                 placeholder="A 2-3 sentence career objective tailored to the role…") }}
+            </div>
+            <div class="col-12">
+              {{ form.education.label(class="form-label") }}
+              {{ form.education(class="form-control", rows="4",
+                 placeholder="Degree, Institution, Year of Graduation\nRelevant courses or honours…") }}
+            </div>
+            <div class="col-12">
+              {{ form.experience.label(class="form-label") }}
+              {{ form.experience(class="form-control", rows="5",
+                 placeholder="Role | Company | Dates\n• Key responsibility (use action verbs)\n• Quantified result where possible") }}
+            </div>
+            <div class="col-12">
+              {{ form.skills_text.label(class="form-label") }}
+              {{ form.skills_text(class="form-control", rows="3",
+                 placeholder="Python, Flask, SQL, Git, Docker…") }}
+            </div>
+            <div class="col-12">
+              {{ form.projects_text.label(class="form-label") }}
+              {{ form.projects_text(class="form-control", rows="4",
+                 placeholder="Project Name | GitHub URL\nDescription: what it does and technologies used") }}
+            </div>
+            <div class="col-12">
+              {{ form.certifications.label(class="form-label") }}
+              {{ form.certifications(class="form-control", rows="3",
+                 placeholder="Google Data Analytics Certificate — Coursera, 2024") }}
+            </div>
+            <div class="col-12 d-flex gap-3 mt-2">
+              {{ form.submit(class="btn btn-accent") }}
+              <a href="{{ url_for('dashboard.resume') }}" class="btn btn-outline-light">Cancel</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

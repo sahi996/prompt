@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Bad Request — AI Career Guidance Assistant{% endblock %}
+{% block content %}
+<div class="error-page container text-center">
+  <div class="py-5">
+    <div class="error-code display-gradient">400</div>
+    <h2 class="fw-bold mt-2">Bad Request</h2>
+    <p class="text-muted mt-3 mb-4">The request could not be understood. Please check your input and try again.</p>
+    <a href="{{ url_for('main.index') }}" class="btn btn-accent btn-lg">
+      <i class="bi bi-house me-2"></i>Go Home
+    </a>
+  </div>
+</div>
+{% endblock %}

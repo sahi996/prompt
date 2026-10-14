@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}Career Assessment — AI Career Guidance Assistant{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <div class="section-badge">Free Assessment</div>
+    <h1 class="section-title mt-2">AI Career Assessment</h1>
+    <p class="text-muted mt-2" style="max-width:600px;">
+      Answer a few questions about your interests, skills, and goals.
+      We'll match you with career paths that could be a great fit.
+    </p>
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="alert alert-info mb-4">
+    <i class="bi bi-info-circle me-2"></i>
+    <strong>Note:</strong> Recommendations are based on your answers and are for exploration purposes only.
+    They are not a scientifically validated assessment and do not guarantee employment outcomes.
+    {% if not current_user.is_authenticated %}
+    <a href="{{ url_for('auth.register') }}" class="alert-link">Create an account</a> to save your results.
+    {% endif %}
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="glass-card">
+        <form method="POST" action="{{ url_for('assessments.index') }}" novalidate>
+          {{ form.hidden_tag() }}
+
+          <!-- Education -->
+          <div class="mb-4">
+            <h5 class="fw-bold mb-3 text-accent"><i class="bi bi-mortarboard me-2"></i>Education</h5>
+            <div class="row g-3">
+              <div class="col-sm-6">
+                {{ form.education_level.label(class="form-label") }}
+                {{ form.education_level(class="form-select" + (" is-invalid" if form.education_level.errors else "")) }}
+                {% for e in form.education_level.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+              </div>
+              <div class="col-sm-6">
+                {{ form.field_of_study.label(class="form-label") }}
+                {{ form.field_of_study(class="form-control", placeholder="e.g. Computer Science, Commerce…") }}
+              </div>
+            </div>
+          </div>
+
+          <hr style="border-color:var(--border);" />
+
+          <!-- Interests -->
+          <div class="mb-4">
+            <h5 class="fw-bold mb-3 text-accent"><i class="bi bi-heart me-2"></i>Interests</h5>
+            {{ form.interests.label(class="form-label") }}
+            <div class="row g-2 mt-1">
+              {% for subfield in form.interests %}
+              <div class="col-sm-6 col-md-4">
+                <div class="form-check p-3 rounded-3" style="background:rgba(255,255,255,.04);border:1px solid var(--border);">
+                  {{ subfield(class="form-check-input") }}
+                  {{ subfield.label(class="form-check-label small") }}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <hr style="border-color:var(--border);" />
+
+          <!-- Skills -->
+          <div class="mb-4">
+            <h5 class="fw-bold mb-3 text-accent"><i class="bi bi-tools me-2"></i>Skills</h5>
+            <div class="row g-3">
+              <div class="col-12">
+                {{ form.favourite_subjects.label(class="form-label") }}
+                {{ form.favourite_subjects(class="form-control", placeholder="e.g. Mathematics, Design, Writing…") }}
+              </div>
+              <div class="col-md-6">
+                {{ form.technical_skills.label(class="form-label") }}
+                {{ form.technical_skills(class="form-control", rows="3",
+                   placeholder="e.g. Python, HTML, Excel, SQL — or 'none'") }}
+              </div>
+              <div class="col-md-6">
+                {{ form.soft_skills.label(class="form-label") }}
+                {{ form.soft_skills(class="form-control", rows="3",
+                   placeholder="e.g. teamwork, communication, creativity") }}
+              </div>
+            </div>
+          </div>
+
+          <hr style="border-color:var(--border);" />
+
+          <!-- Activities -->
+          <div class="mb-4">
+            <h5 class="fw-bold mb-3 text-accent"><i class="bi bi-activity me-2"></i>Preferred Activities</h5>
+            {{ form.preferred_activities.label(class="form-label") }}
+            <div class="row g-2 mt-1">
+              {% for subfield in form.preferred_activities %}
+              <div class="col-sm-6 col-md-3">
+                <div class="form-check p-3 rounded-3" style="background:rgba(255,255,255,.04);border:1px solid var(--border);">
+                  {{ subfield(class="form-check-input") }}
+                  {{ subfield.label(class="form-check-label small") }}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <hr style="border-color:var(--border);" />
+
+          <!-- Goals -->
+          <div class="mb-4">
+            <h5 class="fw-bold mb-3 text-accent"><i class="bi bi-bullseye me-2"></i>Goals &amp; Preferences</h5>
+            <div class="row g-3">
+              <div class="col-12">
+                {{ form.career_goals.label(class="form-label") }}
+                {{ form.career_goals(class="form-control", rows="3",
+                   placeholder="Briefly describe what you hope to achieve in your career…") }}
+              </div>
+              <div class="col-sm-6">
+                {{ form.working_style.label(class="form-label") }}
+                {{ form.working_style(class="form-select") }}
+              </div>
+            </div>
+          </div>
+
+          {{ form.submit(class="btn btn-accent btn-lg w-100") }}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

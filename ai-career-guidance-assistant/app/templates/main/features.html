@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Features — AI Career Guidance Assistant{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <div class="section-badge">Platform Features</div>
+    <h1 class="section-title mt-2">Everything the Platform Offers</h1>
+    <p class="text-muted mt-2" style="max-width:600px;">A complete career guidance toolkit — all free, all in one place.</p>
+  </div>
+</div>
+
+<div class="container py-5">
+  {% set feature_groups = [
+    ("bi-cpu", "AI Career Assessment", "assessment", [
+      "Interactive questionnaire about your education, interests, and skills",
+      "Personalised career recommendations with match explanations",
+      "AI-powered explanations (when API key is configured)",
+      "Transparent rule-based fallback — always works without an API key",
+      "Compare up to 5 recommended careers side-by-side",
+      "Save recommendations and revisit them at any time",
+    ]),
+    ("bi-compass", "Career Explorer", "careers", [
+      "Searchable directory of 10+ career paths",
+      "Filter by category, education level, and beginner-friendliness",
+      "Detailed career pages: description, skills, salary, entry roles",
+      "Suggested next steps and learning resources for every career",
+      "Portfolio project ideas per career",
+    ]),
+    ("bi-graph-up-arrow", "Skill Gap Analysis", "skills_analysis", [
+      "Select a target career and see the required skills",
+      "Mark the skills you already have",
+      "Automatically highlights your skill gaps",
+      "Prioritise skills by importance",
+      "Progress bar showing readiness level",
+      "Save and revisit your analysis after logging in",
+    ]),
+    ("bi-map", "Learning Roadmaps", "roadmaps", [
+      "Stage-by-stage learning paths for each career",
+      "Topics, exercises, and free resources per stage",
+      "Estimated learning hours and total timeline",
+      "Completion checkboxes saved to your account",
+      "Pick up where you left off after any session",
+    ]),
+    ("bi-folder", "Project Ideas", "projects", [
+      "Beginner, intermediate, and advanced project ideas",
+      "Project brief with problem statement and technologies",
+      "Implementation milestones to keep you on track",
+      "Expected learning outcomes for each project",
+      "Optional advanced features to extend each project",
+    ]),
+    ("bi-file-earmark-person", "Resume & Interview Prep", "resume_prep", [
+      "Resume content assistant with section-by-section guidance",
+      "Resume checklist to ensure nothing is missed",
+      "Interview question generator for your target career",
+      "Practice mode with AI feedback (or rule-based tips)",
+      "Job application tracker to manage your search",
+      "Internship preparation tips",
+    ]),
+  ] %}
+
+  <div class="row g-4">
+    {% for icon, title, route, items in feature_groups %}
+    <div class="col-lg-6">
+      <div class="glass-card h-100">
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <div class="feature-icon mb-0">
+            <i class="bi {{ icon }}"></i>
+          </div>
+          <h4 class="fw-bold mb-0">{{ title }}</h4>
+        </div>
+        <ul class="list-unstyled d-flex flex-column gap-2 mb-4">
+          {% for item in items %}
+          <li class="d-flex gap-2 text-muted small">
+            <i class="bi bi-check-circle-fill text-success flex-shrink-0 mt-1"></i>
+            {{ item }}
+          </li>
+          {% endfor %}
+        </ul>
+        {% if route in ['skills_analysis','projects','resume_prep'] %}
+        <a href="{{ url_for('main.' + route) }}" class="btn btn-outline-accent btn-sm">Try it <i class="bi bi-arrow-right ms-1"></i></a>
+        {% elif route in ['assessments','roadmaps'] %}
+        <a href="{{ url_for(route + '.index') }}" class="btn btn-outline-accent btn-sm">Try it <i class="bi bi-arrow-right ms-1"></i></a>
+        {% elif route == 'careers' %}
+        <a href="{{ url_for('careers.explore') }}" class="btn btn-outline-accent btn-sm">Try it <i class="bi bi-arrow-right ms-1"></i></a>
+        {% else %}
+        <a href="{{ url_for('dashboard.index') }}" class="btn btn-outline-accent btn-sm">Try it <i class="bi bi-arrow-right ms-1"></i></a>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="divider-gradient my-5"></div>
+
+  <div class="glass-card">
+    <div class="row align-items-center gy-3">
+      <div class="col-lg-8">
+        <h4 class="fw-bold mb-2">Ready to start your career journey?</h4>
+        <p class="text-muted mb-0">Create a free account to save your progress across all features, or start with the assessment right now — no account required.</p>
+      </div>
+      <div class="col-lg-4 text-lg-end d-flex flex-wrap gap-2 justify-content-lg-end">
+        <a href="{{ url_for('assessments.index') }}" class="btn btn-accent">Start Assessment</a>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-outline-accent">Register Free</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

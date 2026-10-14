@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI Career Guidance Assistant — Discover your strengths, explore career paths, and build your future." />
+  <title>{% block title %}AI Career Guidance Assistant{% endblock %}</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ── Navigation ─────────────────────────────────────────────────────────── -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.index') }}">
+      <div class="brand-icon"><i class="bi bi-mortarboard-fill"></i></div>
+      <span class="brand-text">AI Career <span class="brand-accent">Guide</span></span>
+    </a>
+
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link {% if request.endpoint and request.endpoint.startswith('main.') %}active{% endif %}"
+             href="{{ url_for('main.index') }}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.endpoint and request.endpoint.startswith('careers.') %}active{% endif %}"
+             href="{{ url_for('careers.explore') }}">Explore Careers</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.endpoint and request.endpoint.startswith('assessments.') %}active{% endif %}"
+             href="{{ url_for('assessments.index') }}">Career Assessment</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Tools
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li><a class="dropdown-item" href="{{ url_for('roadmaps.index') }}"><i class="bi bi-map me-2"></i>Learning Roadmaps</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('main.skills_analysis') }}"><i class="bi bi-graph-up me-2"></i>Skill Gap Analysis</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('main.projects') }}"><i class="bi bi-folder me-2"></i>Project Ideas</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('main.resume_prep') }}"><i class="bi bi-file-earmark-person me-2"></i>Resume & Interview Prep</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item" href="{{ url_for('main.features') }}"><i class="bi bi-grid me-2"></i>All Features</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('main.about') }}">About / SDG 8</a>
+        </li>
+      </ul>
+
+      <div class="d-flex align-items-center gap-2">
+        {% if current_user.is_authenticated %}
+          <a href="{{ url_for('dashboard.index') }}" class="btn btn-outline-light btn-sm">
+            <i class="bi bi-speedometer2 me-1"></i>Dashboard
+          </a>
+          <a href="{{ url_for('auth.logout') }}" class="btn btn-accent btn-sm">
+            <i class="bi bi-box-arrow-right me-1"></i>Logout
+          </a>
+        {% else %}
+          <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-sm">Log In</a>
+          <a href="{{ url_for('auth.register') }}" class="btn btn-accent btn-sm">Get Started</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Flash messages ──────────────────────────────────────────────────────── -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="container mt-3" id="flash-container">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<!-- ── Page content ────────────────────────────────────────────────────────── -->
+<main id="main-content">
+  {% block content %}{% endblock %}
+</main>
+
+<!-- ── Footer ─────────────────────────────────────────────────────────────── -->
+<footer class="site-footer mt-auto">
+  <div class="container">
+    <div class="row g-4 py-5">
+      <div class="col-lg-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <div class="brand-icon brand-icon-sm"><i class="bi bi-mortarboard-fill"></i></div>
+          <span class="fw-bold text-white fs-5">AI Career Guide</span>
+        </div>
+        <p class="text-muted small">
+          Discover your strengths, explore career paths, and build your future.
+          Aligned with <strong class="text-accent">UN SDG 8</strong> — Decent Work and Economic Growth.
+        </p>
+        <div class="d-flex gap-3 mt-3">
+          <a href="{{ url_for('main.about') }}" class="text-muted footer-link">
+            <i class="bi bi-info-circle"></i> SDG 8
+          </a>
+          <a href="{{ url_for('main.contact') }}" class="text-muted footer-link">
+            <i class="bi bi-envelope"></i> Contact
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-4 col-sm-6">
+        <h6 class="text-white mb-3 fw-semibold">Explore</h6>
+        <ul class="list-unstyled small">
+          <li><a href="{{ url_for('careers.explore') }}" class="footer-link text-muted">Career Directory</a></li>
+          <li><a href="{{ url_for('assessments.index') }}" class="footer-link text-muted">Career Assessment</a></li>
+          <li><a href="{{ url_for('roadmaps.index') }}" class="footer-link text-muted">Roadmaps</a></li>
+          <li><a href="{{ url_for('main.projects') }}" class="footer-link text-muted">Project Ideas</a></li>
+          <li><a href="{{ url_for('main.skills_analysis') }}" class="footer-link text-muted">Skill Gap Analysis</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-md-4 col-sm-6">
+        <h6 class="text-white mb-3 fw-semibold">Platform</h6>
+        <ul class="list-unstyled small">
+          <li><a href="{{ url_for('main.features') }}" class="footer-link text-muted">Features</a></li>
+          <li><a href="{{ url_for('main.about') }}" class="footer-link text-muted">About</a></li>
+          <li><a href="{{ url_for('main.contact') }}" class="footer-link text-muted">Contact</a></li>
+          <li><a href="{{ url_for('auth.register') }}" class="footer-link text-muted">Create Account</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-md-4 col-sm-6">
+        <h6 class="text-white mb-3 fw-semibold">Legal</h6>
+        <ul class="list-unstyled small">
+          <li><a href="{{ url_for('main.privacy') }}" class="footer-link text-muted">Privacy Policy</a></li>
+          <li><a href="{{ url_for('main.terms') }}" class="footer-link text-muted">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-md-4 col-sm-6">
+        <h6 class="text-white mb-3 fw-semibold">SDG 8</h6>
+        <div class="sdg-badge p-3 rounded-3 text-center">
+          <div class="sdg-number">8</div>
+          <div class="small text-muted mt-1">Decent Work &amp;<br />Economic Growth</div>
+        </div>
+      </div>
+    </div>
+    <hr class="border-secondary" />
+    <div class="row align-items-center py-3">
+      <div class="col-md-6 small text-muted">
+        &copy; {{ now.year if now else '2024' }} AI Career Guidance Assistant.
+        A student project for SDG 8.
+        Recommendations are for informational purposes only.
+      </div>
+      <div class="col-md-6 text-md-end small text-muted">
+        Built with Python, Flask &amp; Bootstrap 5.
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Custom JS -->
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — AI Career Guidance Assistant{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <div class="d-flex align-items-center gap-3">
+      <div class="feature-icon mb-0">
+        <i class="bi bi-speedometer2"></i>
+      </div>
+      <div>
+        <h1 class="section-title mb-0">
+          Welcome back, {{ profile.full_name or current_user.username }}!
+        </h1>
+        <p class="text-muted mt-1 mb-0">Here's your career progress at a glance.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container py-5">
+  <!-- Stats row -->
+  <div class="row g-3 mb-5">
+    {% for icon, label, value, color in [
+      ("bi-bookmark-heart", "Saved Careers", saved_count, "rgba(108,61,227,.2)"),
+      ("bi-clipboard-check", "Assessments", assessment_count, "rgba(16,185,129,.2)"),
+      ("bi-map", "Roadmap Progress", roadmap_pct|string + "%", "rgba(245,158,11,.2)"),
+      ("bi-kanban", "Applications", app_count, "rgba(59,130,246,.2)"),
+    ] %}
+    <div class="col-6 col-lg-3">
+      <div class="stat-card">
+        <div class="stat-icon mb-3" style="background:{{ color }};">
+          <i class="bi {{ icon }} text-accent"></i>
+        </div>
+        <div class="stat-value">{{ value }}</div>
+        <div class="small text-muted mt-1">{{ label }}</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Main grid -->
+  <div class="row g-4">
+    <!-- Left column -->
+    <div class="col-lg-8">
+      <!-- Roadmap progress -->
+      <div class="glass-card mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold mb-0"><i class="bi bi-map text-accent me-2"></i>Learning Progress</h5>
+          <a href="{{ url_for('dashboard.roadmaps') }}" class="btn btn-outline-accent btn-sm">View All</a>
+        </div>
+        {% if total_stages > 0 %}
+        <div class="d-flex justify-content-between small text-muted mb-2">
+          <span>{{ done_stages }} / {{ total_stages }} stages completed</span>
+          <span id="roadmapProgressLabel">{{ roadmap_pct }}%</span>
+        </div>
+        <div class="progress" style="height:10px;">
+          <div class="progress-bar" id="roadmapProgress"
+               data-width="{{ roadmap_pct }}%"
+               style="width:{{ roadmap_pct }}%;"
+               aria-valuenow="{{ roadmap_pct }}"
+               aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        {% else %}
+        <p class="text-muted small mb-2">No roadmap stages tracked yet.</p>
+        <a href="{{ url_for('roadmaps.index') }}" class="btn btn-accent btn-sm">Explore Roadmaps</a>
+        {% endif %}
+      </div>
+
+      <!-- Recent job applications -->
+      <div class="glass-card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold mb-0"><i class="bi bi-kanban text-accent me-2"></i>Recent Applications</h5>
+          <a href="{{ url_for('dashboard.add_application') }}" class="btn btn-accent btn-sm">
+            <i class="bi bi-plus me-1"></i>Add
+          </a>
+        </div>
+        {% if recent_apps %}
+        <div class="table-responsive">
+          <table class="table table-dark table-hover small align-middle">
+            <thead>
+              <tr>
+                <th>Company</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for app in recent_apps %}
+              <tr>
+                <td class="fw-medium">{{ app.company }}</td>
+                <td class="text-muted">{{ app.role }}</td>
+                <td>
+                  {% set status_map = {
+                    'Applied': 'badge-medium',
+                    'Interview': 'badge-high',
+                    'Offer': 'badge-high',
+                    'Rejected': 'badge-low',
+                    'Assessment': 'badge-medium',
+                    'Withdrawn': 'badge-low',
+                  } %}
+                  <span class="badge-demand {{ status_map.get(app.status, 'badge-medium') }}">{{ app.status }}</span>
+                </td>
+                <td class="text-muted">{{ app.applied_date.strftime('%b %d') if app.applied_date else '—' }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <a href="{{ url_for('dashboard.applications') }}" class="small text-accent">View all applications →</a>
+        {% else %}
+        <p class="text-muted small mb-2">No applications tracked yet.</p>
+        <a href="{{ url_for('dashboard.add_application') }}" class="btn btn-outline-accent btn-sm">Track an Application</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Right column -->
+    <div class="col-lg-4">
+      <!-- Quick links -->
+      <div class="glass-card mb-4">
+        <h5 class="fw-bold mb-3"><i class="bi bi-lightning text-accent me-2"></i>Quick Actions</h5>
+        <div class="d-flex flex-column gap-2">
+          {% for icon, label, url in [
+            ("bi-cpu", "Take Assessment", url_for('assessments.index')),
+            ("bi-compass", "Explore Careers", url_for('careers.explore')),
+            ("bi-graph-up", "Skill Gap Analysis", url_for('dashboard.skill_analysis')),
+            ("bi-file-earmark-person", "Resume Drafts", url_for('dashboard.resume')),
+            ("bi-mic", "Interview Practice", url_for('main.resume_prep')),
+            ("bi-person-gear", "Edit Profile", url_for('dashboard.profile')),
+          ] %}
+          <a href="{{ url }}" class="d-flex align-items-center gap-3 p-2 rounded-3 text-muted small"
+             style="transition:background .2s;" onmouseover="this.style.background='rgba(108,61,227,.1)'" onmouseout="this.style.background='transparent'">
+            <i class="bi {{ icon }} text-accent"></i>{{ label }}
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Saved careers -->
+      <div class="glass-card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold mb-0"><i class="bi bi-bookmark-heart text-accent me-2"></i>Saved Careers</h5>
+          <a href="{{ url_for('dashboard.saved_careers') }}" class="small text-accent">View All</a>
+        </div>
+        {% if current_user.saved_careers %}
+        <div class="d-flex flex-column gap-2">
+          {% for c in current_user.saved_careers[:5] %}
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi {{ c.icon or 'bi-briefcase' }} text-accent small"></i>
+            <a href="{{ url_for('careers.detail', slug=c.slug) }}" class="text-muted small">{{ c.title }}</a>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-muted small mb-2">No saved careers yet.</p>
+        <a href="{{ url_for('careers.explore') }}" class="btn btn-outline-accent btn-sm">Browse Careers</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

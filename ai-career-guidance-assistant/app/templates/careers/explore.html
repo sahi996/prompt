@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Explore Careers — AI Career Guidance Assistant{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <div class="section-badge">Career Directory</div>
+    <h1 class="section-title mt-2">Explore Career Paths</h1>
+    <p class="text-muted mt-2" style="max-width:600px;">
+      Browse {{ careers|length }} career path{{ 's' if careers|length != 1 }}
+      {% if q %}matching "{{ q }}"{% endif %}.
+      Use the filters to narrow your search.
+    </p>
+  </div>
+</div>
+
+<div class="container py-5">
+  <!-- Filters -->
+  <form method="GET" action="{{ url_for('careers.explore') }}" class="glass-card mb-5">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-5">
+        <label class="form-label">Search</label>
+        <div class="input-group">
+          <span class="input-group-text" style="background:rgba(255,255,255,.06);border-color:var(--border);color:var(--text-muted);">
+            <i class="bi bi-search"></i>
+          </span>
+          <input type="text" name="q" class="form-control" value="{{ q }}"
+                 placeholder="Search careers…" id="careerSearch" />
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Category</label>
+        <select name="category" class="form-select">
+          <option value="">All Categories</option>
+          {% for cat in categories %}
+          <option value="{{ cat }}" {% if cat == selected_category %}selected{% endif %}>{{ cat }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <div class="form-check mt-4">
+          <input class="form-check-input" type="checkbox" name="beginner" value="1" id="beginnerCheck"
+                 {% if beginner_filter == '1' %}checked{% endif %} />
+          <label class="form-check-label small" for="beginnerCheck">Beginner-Friendly</label>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-accent w-100">Filter</button>
+      </div>
+    </div>
+    {% if q or selected_category or beginner_filter %}
+    <div class="mt-3">
+      <a href="{{ url_for('careers.explore') }}" class="small text-accent">
+        <i class="bi bi-x-circle me-1"></i>Clear filters
+      </a>
+    </div>
+    {% endif %}
+  </form>
+
+  <!-- Career grid -->
+  {% if careers %}
+  <div class="row g-4">
+    {% for career in careers %}
+    <div class="col-sm-6 col-lg-4">
+      <div class="career-card" data-career-card>
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="career-card-icon">
+              <i class="bi {{ career.icon or 'bi-briefcase' }}"></i>
+            </div>
+            <div class="d-flex flex-column align-items-end gap-1">
+              <span class="badge-demand badge-{{ career.demand_level | lower }}">{{ career.demand_level }}</span>
+              {% if career.is_beginner_friendly %}
+              <span class="badge-demand badge-high" style="font-size:.65rem;">Beginner ✓</span>
+              {% endif %}
+            </div>
+          </div>
+          <h5 class="fw-bold mb-1">{{ career.title }}</h5>
+          <div class="small text-muted mb-2">{{ career.category }}</div>
+          <p class="text-muted small mb-3">{{ career.short_description }}</p>
+          <div class="mb-3">
+            {% for skill in career.skills[:3] %}
+            <span class="skill-tag">{{ skill.name }}</span>
+            {% endfor %}
+            {% if career.skills|length > 3 %}
+            <span class="skill-tag">+{{ career.skills|length - 3 }}</span>
+            {% endif %}
+          </div>
+          <div class="d-flex gap-2">
+            <a href="{{ url_for('careers.detail', slug=career.slug) }}" class="btn btn-accent btn-sm flex-grow-1">
+              Explore <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+            {% if current_user.is_authenticated %}
+            <form method="POST" action="{{ url_for('dashboard.toggle_saved_career', career_id=career.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+              <button type="submit" class="btn btn-outline-light btn-sm" title="Save career">
+                {% if career in current_user.saved_careers %}
+                <i class="bi bi-bookmark-fill text-accent"></i>
+                {% else %}
+                <i class="bi bi-bookmark"></i>
+                {% endif %}
+              </button>
+            </form>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="glass-card text-center py-5">
+    <i class="bi bi-search fs-1 text-accent mb-3 d-block"></i>
+    <h5 class="fw-bold">No careers found</h5>
+    <p class="text-muted">Try a different search term or clear the filters.</p>
+    <a href="{{ url_for('careers.explore') }}" class="btn btn-outline-accent">Show All Careers</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

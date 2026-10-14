@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block title %}{{ career.title }} Roadmap — AI Career Guidance Assistant{% endblock %}
+
+{% block extra_css %}
+<meta name="csrf-token" content="{{ csrf_token() }}" />
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb small">
+        <li class="breadcrumb-item"><a href="{{ url_for('roadmaps.index') }}" class="text-accent">Roadmaps</a></li>
+        <li class="breadcrumb-item active text-muted">{{ career.title }}</li>
+      </ol>
+    </nav>
+    <div class="d-flex align-items-center gap-3 mt-3">
+      <div class="career-card-icon" style="flex-shrink:0;"><i class="bi {{ career.icon or 'bi-map' }}"></i></div>
+      <div>
+        <h1 class="section-title mb-1">{{ roadmap.title }}</h1>
+        <div class="text-muted small">{{ roadmap.stages|length }} stages · ~{{ roadmap.estimated_weeks }} weeks</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container py-5">
+  {% if not current_user.is_authenticated %}
+  <div class="alert alert-info mb-4">
+    <i class="bi bi-info-circle me-2"></i>
+    <a href="{{ url_for('auth.register') }}" class="alert-link">Create an account</a>
+    to save your roadmap progress.
+  </div>
+  {% endif %}
+
+  <!-- Progress bar -->
+  {% if current_user.is_authenticated %}
+  <div class="glass-card mb-5">
+    <div class="d-flex justify-content-between small text-muted mb-2">
+      <span>{{ done }} / {{ total }} stages completed</span>
+      <span id="roadmapProgressLabel">{{ pct }}%</span>
+    </div>
+    <div class="progress" style="height:10px;">
+      <div class="progress-bar" id="roadmapProgress"
+           data-width="{{ pct }}%"
+           style="width:{{ pct }}%;"
+           aria-valuenow="{{ pct }}"
+           aria-valuemin="0" aria-valuemax="100">
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Stages -->
+  <div class="roadmap-timeline">
+    {% for stage in roadmap.stages %}
+    {% set progress = progress_map.get(stage.id) %}
+    {% set is_done = progress and progress.completed %}
+    <div class="roadmap-step {% if is_done %}completed{% endif %}" id="stage-{{ stage.id }}">
+      <div class="roadmap-step-dot">
+        {% if is_done %}
+        <i class="bi bi-check" style="font-size:.6rem;color:white;"></i>
+        {% endif %}
+      </div>
+
+      <div class="glass-card mb-0" style="margin-left:1rem;">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div class="d-flex align-items-center gap-3">
+            {% if current_user.is_authenticated %}
+            <input type="checkbox"
+                   class="form-check-input stage-checkbox flex-shrink-0"
+                   data-stage-id="{{ stage.id }}"
+                   data-roadmap-id="{{ roadmap.id }}"
+                   {% if is_done %}checked{% endif %} />
+            {% endif %}
+            <div>
+              <h5 class="fw-bold mb-0">Stage {{ stage.order }}: {{ stage.title }}</h5>
+              {% if stage.estimated_hours %}
+              <div class="text-muted small">~{{ stage.estimated_hours }} hours</div>
+              {% endif %}
+            </div>
+          </div>
+          {% if is_done %}
+          <span class="badge-demand badge-high small">Completed</span>
+          {% endif %}
+        </div>
+
+        {% if stage.description %}
+        <p class="text-muted small mb-3">{{ stage.description }}</p>
+        {% endif %}
+
+        <!-- Toggle details -->
+        <button class="btn btn-outline-accent btn-sm mb-3"
+                data-bs-toggle="collapse" data-bs-target="#stage-detail-{{ stage.id }}"
+                aria-expanded="false">
+          <i class="bi bi-chevron-down me-1"></i>Topics &amp; Resources
+        </button>
+
+        <div class="collapse" id="stage-detail-{{ stage.id }}">
+          <div class="row g-3">
+            {% if stage.topics %}
+            {% set topics = stage.topics | from_json %}
+            <div class="col-md-6">
+              <div class="small fw-semibold text-muted mb-2">Topics</div>
+              <ul class="list-unstyled d-flex flex-column gap-1">
+                {% for topic in topics %}
+                <li class="small text-muted d-flex gap-2">
+                  <i class="bi bi-check-circle text-success flex-shrink-0"></i>{{ topic }}
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+
+            {% if stage.exercises %}
+            {% set exercises = stage.exercises | from_json %}
+            <div class="col-md-6">
+              <div class="small fw-semibold text-muted mb-2">Practice Exercises</div>
+              <ul class="list-unstyled d-flex flex-column gap-1">
+                {% for ex in exercises %}
+                <li class="small text-muted d-flex gap-2">
+                  <i class="bi bi-pencil-square text-accent flex-shrink-0"></i>{{ ex }}
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+
+            {% if stage.resources %}
+            {% set resources = stage.resources | from_json %}
+            <div class="col-12">
+              <div class="small fw-semibold text-muted mb-2">Free Learning Resources</div>
+              <div class="d-flex flex-wrap gap-2">
+                {% for res in resources %}
+                <a href="{{ res.url }}" target="_blank" rel="noopener"
+                   class="btn btn-outline-accent btn-sm">
+                  <i class="bi {{ 'bi-play-circle' if res.type == 'video' else ('bi-book' if res.type == 'book' else 'bi-link-45deg') }} me-1"></i>
+                  {{ res.title }}
+                  <i class="bi bi-box-arrow-up-right ms-1 small"></i>
+                </a>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="divider-gradient my-5"></div>
+
+  <div class="d-flex flex-wrap gap-3">
+    <a href="{{ url_for('careers.detail', slug=career.slug) }}" class="btn btn-outline-accent">
+      <i class="bi bi-arrow-left me-2"></i>Back to Career
+    </a>
+    <a href="{{ url_for('roadmaps.index') }}" class="btn btn-outline-light">
+      All Roadmaps
+    </a>
+  </div>
+</div>
+{% endblock %}

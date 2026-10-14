@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+{% block title %}AI Career Guidance Assistant — Discover Your Future{% endblock %}
+
+{% block content %}
+
+<!-- ── Hero ──────────────────────────────────────────────────────────────── -->
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-6">
+        <div class="hero-badge fade-up">
+          <i class="bi bi-stars"></i>
+          Aligned with UN SDG 8 — Decent Work &amp; Economic Growth
+        </div>
+        <h1 class="hero-title fade-up fade-up-delay-1">
+          <span class="display-gradient">Discover Your Strengths.<br />Build Your Future.</span>
+        </h1>
+        <p class="hero-subtitle fade-up fade-up-delay-2">
+          AI-powered career guidance that helps students, fresh graduates, and job seekers
+          explore careers, close skill gaps, and step into employment with confidence.
+        </p>
+        <div class="d-flex flex-wrap gap-3 fade-up fade-up-delay-3">
+          <a href="{{ url_for('assessments.index') }}" class="btn btn-accent btn-lg">
+            <i class="bi bi-cpu me-2"></i>Start Career Assessment
+          </a>
+          <a href="{{ url_for('careers.explore') }}" class="btn btn-outline-light btn-lg">
+            <i class="bi bi-compass me-2"></i>Explore Careers
+          </a>
+        </div>
+
+        <!-- Career search bar -->
+        <div class="mt-4 fade-up fade-up-delay-3">
+          <form action="{{ url_for('careers.explore') }}" method="GET" class="d-flex gap-2">
+            <input type="text" name="q" class="form-control"
+                   placeholder="Search a career (e.g. Python Developer, UX Designer)…" />
+            <button type="submit" class="btn btn-accent">
+              <i class="bi bi-search"></i>
+            </button>
+          </form>
+        </div>
+
+        <div class="hero-stats fade-up fade-up-delay-3">
+          <div>
+            <div class="hero-stat-num">10+</div>
+            <div class="hero-stat-label">Career Paths</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">30+</div>
+            <div class="hero-stat-label">Skills Mapped</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">Free</div>
+            <div class="hero-stat-label">No Cost</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 fade-up fade-up-delay-2">
+        <div class="floating-card">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div class="feature-icon mb-0">
+              <i class="bi bi-robot"></i>
+            </div>
+            <div>
+              <div class="fw-semibold">AI Career Assessment</div>
+              <div class="small text-muted">Answer a few questions, get personalised matches</div>
+            </div>
+          </div>
+          <hr style="border-color:var(--border);" />
+          <div class="d-flex flex-column gap-2">
+            {% set sample_careers = [
+              ("Python Developer", "bi-code-slash", "High"),
+              ("Data Analyst", "bi-bar-chart", "High"),
+              ("UI/UX Designer", "bi-palette", "High"),
+            ] %}
+            {% for title, icon, demand in sample_careers %}
+            <div class="d-flex align-items-center gap-3 p-3 rounded-3" style="background:rgba(108,61,227,.1);">
+              <i class="bi {{ icon }} text-accent fs-5"></i>
+              <div class="flex-grow-1">
+                <div class="fw-medium small">{{ title }}</div>
+                <div class="progress mt-1" style="height:4px;">
+                  <div class="progress-bar" style="width:{{ [75,65,55] | random }}%;"></div>
+                </div>
+              </div>
+              <span class="badge-demand badge-high">{{ demand }}</span>
+            </div>
+            {% endfor %}
+          </div>
+          <p class="small text-muted mt-3 mb-0">
+            <i class="bi bi-info-circle me-1"></i>
+            These are illustrative examples. Actual results are based on your profile.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Features overview ─────────────────────────────────────────────────── -->
+<section class="py-6 py-5">
+  <div class="container py-4">
+    <div class="text-center mb-5">
+      <div class="section-badge">What We Offer</div>
+      <h2 class="section-title">Everything You Need to Launch Your Career</h2>
+      <p class="text-muted mt-3 mx-auto" style="max-width:560px;">
+        From self-assessment to interview preparation — one platform, entirely free.
+      </p>
+    </div>
+    <div class="row g-4">
+      {% set features = [
+        ("bi-cpu", "AI Career Assessment", "Answer questions about your interests and skills. Receive personalised career recommendations instantly."),
+        ("bi-compass", "Career Explorer", "Browse 10+ career paths with descriptions, skills required, salary ranges, and beginner-friendly ratings."),
+        ("bi-graph-up-arrow", "Skill Gap Analysis", "Compare your current skills with those needed for your target career. Know exactly what to learn next."),
+        ("bi-map", "Learning Roadmaps", "Structured, stage-by-stage roadmaps with free resources, exercises, and progress tracking."),
+        ("bi-folder", "Project Ideas", "Beginner, intermediate, and advanced project ideas to build your portfolio and demonstrate real skills."),
+        ("bi-file-earmark-person", "Resume & Interview Prep", "Resume checklist, interview question generator, practice mode, and application tracker."),
+      ] %}
+      {% for icon, title, desc in features %}
+      <div class="col-md-6 col-lg-4">
+        <div class="glass-card h-100">
+          <div class="feature-icon">
+            <i class="bi {{ icon }}"></i>
+          </div>
+          <h5 class="fw-bold mb-2">{{ title }}</h5>
+          <p class="text-muted small mb-0">{{ desc }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ── How it works ───────────────────────────────────────────────────────── -->
+<section style="background:rgba(255,255,255,.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container py-5">
+    <div class="text-center mb-5">
+      <div class="section-badge">How It Works</div>
+      <h2 class="section-title">Four Steps to Career Clarity</h2>
+    </div>
+    <div class="row g-4 justify-content-center">
+      {% set steps = [
+        ("1", "bi-person-check", "Create Your Profile", "Register for free. Tell us your education, interests, and existing skills."),
+        ("2", "bi-clipboard-check", "Take the Assessment", "Complete a short questionnaire. Our engine analyses your profile."),
+        ("3", "bi-stars", "Receive Recommendations", "Get matched career paths with explanations, roadmaps, and learning resources."),
+        ("4", "bi-rocket-takeoff", "Build & Apply", "Follow your roadmap, build portfolio projects, and track your job applications."),
+      ] %}
+      {% for num, icon, title, desc in steps %}
+      <div class="col-sm-6 col-lg-3 text-center">
+        <div class="step-number">{{ num }}</div>
+        <div class="feature-icon mx-auto" style="width:48px;height:48px;">
+          <i class="bi {{ icon }}"></i>
+        </div>
+        <h5 class="fw-bold mt-3 mb-2">{{ title }}</h5>
+        <p class="text-muted small">{{ desc }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ── Featured careers ───────────────────────────────────────────────────── -->
+{% if featured %}
+<section class="py-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <div class="section-badge">Beginner-Friendly</div>
+        <h2 class="section-title mt-1">Popular Career Paths</h2>
+      </div>
+      <a href="{{ url_for('careers.explore') }}" class="btn btn-outline-accent">
+        View All <i class="bi bi-arrow-right ms-1"></i>
+      </a>
+    </div>
+    <div class="row g-4">
+      {% for career in featured %}
+      <div class="col-sm-6 col-lg-4">
+        <div class="career-card">
+          <div class="card-body">
+            <div class="career-card-icon">
+              <i class="bi {{ career.icon or 'bi-briefcase' }}"></i>
+            </div>
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h5 class="fw-bold mb-0">{{ career.title }}</h5>
+              <span class="badge-demand badge-{{ career.demand_level | lower }}">{{ career.demand_level }}</span>
+            </div>
+            <p class="text-muted small mb-3">{{ career.short_description }}</p>
+            <div class="mb-3">
+              {% for skill in career.skills[:3] %}
+              <span class="skill-tag">{{ skill.name }}</span>
+              {% endfor %}
+              {% if career.skills | length > 3 %}
+              <span class="skill-tag">+{{ career.skills | length - 3 }} more</span>
+              {% endif %}
+            </div>
+            <a href="{{ url_for('careers.detail', slug=career.slug) }}" class="btn btn-accent w-100 btn-sm">
+              Explore Career <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ── SDG 8 section ──────────────────────────────────────────────────────── -->
+<section style="background:linear-gradient(135deg,rgba(108,61,227,.1) 0%,rgba(15,21,53,1) 100%);border-top:1px solid var(--border);">
+  <div class="container py-5">
+    <div class="row align-items-center gy-4">
+      <div class="col-lg-7">
+        <div class="section-badge">UN SDG 8</div>
+        <h2 class="section-title mt-2">Decent Work &amp; Economic Growth</h2>
+        <p class="text-muted mt-3">
+          The United Nations Sustainable Development Goal 8 promotes sustained, inclusive, and sustainable economic
+          growth — and full and productive employment for all. Globally, millions of young people face barriers to
+          decent work due to a lack of career information, guidance, and skill development opportunities.
+        </p>
+        <p class="text-muted">
+          This platform directly addresses that challenge by providing free, accessible career guidance and skill
+          development resources to students and fresh graduates, regardless of their background or location.
+        </p>
+        <a href="{{ url_for('main.about') }}" class="btn btn-outline-accent mt-2">
+          Learn More About Our SDG 8 Mission <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+      </div>
+      <div class="col-lg-5 text-center">
+        <div class="sdg-badge p-4 rounded-4 d-inline-block">
+          <div class="sdg-number" style="font-size:5rem;">8</div>
+          <div class="h5 mt-2">Decent Work &amp;<br />Economic Growth</div>
+          <div class="small text-muted mt-2">United Nations SDG 8</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Benefits ───────────────────────────────────────────────────────────── -->
+<section class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-badge">For Students &amp; Graduates</div>
+      <h2 class="section-title">Why Use AI Career Guidance Assistant?</h2>
+    </div>
+    <div class="row g-4">
+      {% set benefits = [
+        ("bi-check-circle-fill text-success", "Completely Free", "No subscriptions, no hidden charges. All core features are free."),
+        ("bi-shield-check", "Privacy First", "Your data stays secure. We never sell or share your personal information."),
+        ("bi-lightning-charge", "No AI Key Required", "Full functionality with our built-in rule-based engine. AI API is optional."),
+        ("bi-phone", "Mobile Friendly", "Use it on any device — phone, tablet, laptop, or desktop."),
+        ("bi-bookmark-heart", "Save Your Progress", "Save careers, roadmaps, and skill analyses. Pick up where you left off."),
+        ("bi-people", "Inclusive &amp; Accessible", "Designed for all education levels, backgrounds, and career starting points."),
+      ] %}
+      {% for icon, title, desc in benefits %}
+      <div class="col-md-6 col-lg-4">
+        <div class="d-flex gap-3">
+          <i class="bi {{ icon }} fs-4 flex-shrink-0 mt-1"></i>
+          <div>
+            <div class="fw-semibold">{{ title }}</div>
+            <div class="small text-muted">{{ desc }}</div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ────────────────────────────────────────────────────────────────── -->
+<section style="border-top:1px solid var(--border);">
+  <div class="container py-5">
+    <div class="text-center mb-5">
+      <div class="section-badge">FAQ</div>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="accordion" id="faqAccordion">
+          {% set faqs = [
+            ("Do I need to create an account?",
+             "No — you can explore career information, browse the directory, and read roadmaps without registering. An account is only required to save your personal progress, assessments, and career choices."),
+            ("Do I need an AI API key?",
+             "No. The platform works fully without any API key using our transparent rule-based recommendation engine. If you or your institution has an OpenAI API key, you can configure it for richer explanations — but it is entirely optional."),
+            ("How accurate are the career recommendations?",
+             "Recommendations are based on your answers about interests, skills, and goals. They are meant to inspire exploration, not to predict your career path scientifically. Skill requirements vary by employer, country, and industry. Always verify information with real job postings."),
+            ("Is my data safe?",
+             "Yes. Passwords are securely hashed and never stored in plain text. Personal data is stored in a private database and is accessible only to you. We do not sell or share user data."),
+            ("Can I change my career recommendations later?",
+             "Yes — you can retake the assessment as many times as you like, and your history is saved so you can compare results."),
+            ("Is this platform affiliated with any university or employer?",
+             "No. This is an independent student project aligned with UN SDG 8. It does not represent any university, employer, or certification body. Career information is provided for educational purposes only."),
+          ] %}
+          {% for i, (q, a) in enumerate(faqs) %}
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button {% if i != 0 %}collapsed{% endif %}" type="button"
+                      data-bs-toggle="collapse" data-bs-target="#faq{{ i }}" aria-expanded="{{ 'true' if i == 0 else 'false' }}">
+                {{ q }}
+              </button>
+            </h2>
+            <div id="faq{{ i }}" class="accordion-collapse collapse {% if i == 0 %}show{% endif %}" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-muted">{{ a }}</div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ────────────────────────────────────────────────────────────────── -->
+<section style="background:linear-gradient(135deg,var(--violet-dark),var(--violet));border-top:1px solid rgba(255,255,255,.15);">
+  <div class="container py-5 text-center">
+    <h2 class="section-title mb-3">Ready to Discover Your Career Path?</h2>
+    <p class="text-muted mb-4 mx-auto" style="max-width:480px;">
+      Take the free career assessment now — no account required to get started.
+    </p>
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      <a href="{{ url_for('assessments.index') }}" class="btn btn-light btn-lg fw-bold">
+        <i class="bi bi-cpu me-2"></i>Start Free Assessment
+      </a>
+      <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light btn-lg">
+        <i class="bi bi-person-plus me-2"></i>Create Free Account
+      </a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

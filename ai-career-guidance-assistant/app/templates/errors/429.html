@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Too Many Requests — AI Career Guidance Assistant{% endblock %}
+{% block content %}
+<div class="error-page container text-center">
+  <div class="py-5">
+    <div class="error-code display-gradient">429</div>
+    <h2 class="fw-bold mt-2">Too Many Requests</h2>
+    <p class="text-muted mt-3 mb-4">You've made too many requests. Please wait a moment before trying again.</p>
+    <a href="{{ url_for('main.index') }}" class="btn btn-accent btn-lg">
+      <i class="bi bi-house me-2"></i>Go Home
+    </a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Saved Careers — Dashboard{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h1 class="section-title">Saved Careers</h1>
+    <p class="text-muted mt-1">Career paths you've bookmarked for further exploration.</p>
+  </div>
+</div>
+<div class="container py-5">
+  {% if careers %}
+  <div class="row g-4">
+    {% for career in careers %}
+    <div class="col-sm-6 col-lg-4">
+      <div class="career-card">
+        <div class="card-body">
+          <div class="career-card-icon"><i class="bi {{ career.icon or 'bi-briefcase' }}"></i></div>
+          <h5 class="fw-bold mb-2">{{ career.title }}</h5>
+          <p class="text-muted small mb-3">{{ career.short_description }}</p>
+          <div class="d-flex gap-2">
+            <a href="{{ url_for('careers.detail', slug=career.slug) }}" class="btn btn-accent btn-sm flex-grow-1">View Career</a>
+            <form method="POST" action="{{ url_for('dashboard.toggle_saved_career', career_id=career.id) }}">
+              {{ csrf_token()|safe }}
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+              <button type="submit" class="btn btn-outline-light btn-sm" title="Remove">
+                <i class="bi bi-bookmark-x"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="glass-card text-center py-5">
+    <i class="bi bi-bookmark fs-1 text-accent mb-3 d-block"></i>
+    <h5 class="fw-bold">No saved careers yet</h5>
+    <p class="text-muted">Browse the career directory and bookmark paths that interest you.</p>
+    <a href="{{ url_for('careers.explore') }}" class="btn btn-accent">Explore Careers</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

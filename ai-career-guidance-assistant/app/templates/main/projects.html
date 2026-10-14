@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}Project Ideas — AI Career Guidance Assistant{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <div class="section-badge">Build Your Portfolio</div>
+    <h1 class="section-title mt-2">Project Recommendations</h1>
+    <p class="text-muted mt-2" style="max-width:600px;">
+      Hands-on projects are the best way to demonstrate skills to employers.
+      Browse beginner, intermediate, and advanced project ideas below.
+    </p>
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="alert alert-info mb-4">
+    <i class="bi bi-info-circle me-2"></i>
+    Projects marked as completed are for your personal tracking only.
+    Recruiters will ask to see your actual code — always link to a real GitHub repository.
+  </div>
+
+  {% macro project_cards(projects_list, level, icon, color) %}
+  <section class="mb-5">
+    <div class="d-flex align-items-center gap-3 mb-4">
+      <div class="feature-icon mb-0" style="background:{{ color }};">
+        <i class="bi {{ icon }}"></i>
+      </div>
+      <div>
+        <h3 class="fw-bold mb-0">{{ level }} Projects</h3>
+        <div class="text-muted small">{{ projects_list | length }} project{{ 's' if projects_list | length != 1 }}</div>
+      </div>
+    </div>
+
+    {% if projects_list %}
+    <div class="row g-4">
+      {% for project in projects_list %}
+      <div class="col-md-6 col-lg-4">
+        <div class="glass-card h-100">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="badge-demand badge-{{ 'high' if level == 'Beginner' else ('medium' if level == 'Intermediate' else 'low') }} small">{{ level }}</span>
+            <span class="text-muted small">{{ project.career.title }}</span>
+          </div>
+          <h5 class="fw-bold mb-2">{{ project.title }}</h5>
+          <p class="text-muted small mb-3">{{ project.problem_statement }}</p>
+
+          {% if project.technologies %}
+          {% set techs = project.technologies | from_json %}
+          <div class="mb-3">
+            {% for tech in techs %}
+            <span class="skill-tag">{{ tech }}</span>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          {% if project.core_features %}
+          {% set features = project.core_features | from_json %}
+          <div class="mb-3">
+            <div class="small text-muted fw-semibold mb-1">Core Features</div>
+            <ul class="list-unstyled d-flex flex-column gap-1">
+              {% for feat in features[:3] %}
+              <li class="small text-muted d-flex gap-2">
+                <i class="bi bi-check-circle text-success flex-shrink-0"></i>{{ feat }}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+
+          <button type="button" class="btn btn-outline-accent btn-sm w-100 mt-auto"
+                  data-bs-toggle="collapse" data-bs-target="#proj{{ project.id }}">
+            View Full Brief <i class="bi bi-chevron-down ms-1"></i>
+          </button>
+          <div class="collapse mt-3" id="proj{{ project.id }}">
+            {% if project.milestones %}
+            {% set ms = project.milestones | from_json %}
+            <div class="mb-2">
+              <div class="small fw-semibold text-muted mb-1">Milestones</div>
+              <ol class="small text-muted ps-3">
+                {% for m in ms %}<li>{{ m }}</li>{% endfor %}
+              </ol>
+            </div>
+            {% endif %}
+            {% if project.learning_outcomes %}
+            {% set lo = project.learning_outcomes | from_json %}
+            <div>
+              <div class="small fw-semibold text-muted mb-1">Learning Outcomes</div>
+              <ul class="small text-muted ps-3">
+                {% for l in lo %}<li>{{ l }}</li>{% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="glass-card text-center py-4 text-muted">No {{ level | lower }} projects in the database yet.</div>
+    {% endif %}
+  </section>
+  {% endmacro %}
+
+  {{ project_cards(beginner, "Beginner", "bi-seedling", "rgba(16,185,129,.2)") }}
+  {{ project_cards(intermediate, "Intermediate", "bi-layers", "rgba(245,158,11,.15)") }}
+  {{ project_cards(advanced, "Advanced", "bi-rocket-takeoff", "rgba(239,68,68,.15)") }}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Register a simple Jinja filter workaround: parse JSON in template
+// (handled by the from_json filter registered below in routes)
+</script>
+{% endblock %}

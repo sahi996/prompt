@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if app_obj else 'Add' }} Application — Dashboard{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h1 class="section-title">{{ 'Edit' if app_obj else 'Add' }} Application</h1>
+  </div>
+</div>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="glass-card">
+        <form method="POST" novalidate>
+          {{ form.hidden_tag() }}
+          <div class="row g-3">
+            <div class="col-sm-6">
+              {{ form.company.label(class="form-label") }}
+              {{ form.company(class="form-control" + (" is-invalid" if form.company.errors else ""), placeholder="Company name") }}
+              {% for e in form.company.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="col-sm-6">
+              {{ form.role.label(class="form-label") }}
+              {{ form.role(class="form-control" + (" is-invalid" if form.role.errors else ""), placeholder="Job title / role") }}
+              {% for e in form.role.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="col-sm-6">
+              {{ form.status.label(class="form-label") }}
+              {{ form.status(class="form-select") }}
+            </div>
+            <div class="col-sm-6">
+              {{ form.applied_date.label(class="form-label") }}
+              {{ form.applied_date(class="form-control", type="date") }}
+            </div>
+            <div class="col-12">
+              {{ form.url.label(class="form-label") }}
+              {{ form.url(class="form-control" + (" is-invalid" if form.url.errors else ""), placeholder="https://…") }}
+              {% for e in form.url.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="col-12">
+              {{ form.notes.label(class="form-label") }}
+              {{ form.notes(class="form-control", rows="4", placeholder="Notes, interview dates, contacts…") }}
+            </div>
+            <div class="col-12 d-flex gap-3 mt-2">
+              {{ form.submit(class="btn btn-accent") }}
+              <a href="{{ url_for('dashboard.applications') }}" class="btn btn-outline-light">Cancel</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile — AI Career Guidance Assistant{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h1 class="section-title">Edit Profile</h1>
+    <p class="text-muted mt-1">Update your personal information and career preferences.</p>
+  </div>
+</div>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="glass-card">
+        <form method="POST" action="{{ url_for('dashboard.profile') }}" novalidate>
+          {{ form.hidden_tag() }}
+          <div class="row g-3">
+            <div class="col-sm-6">
+              {{ form.full_name.label(class="form-label") }}
+              {{ form.full_name(class="form-control" + (" is-invalid" if form.full_name.errors else ""), placeholder="Your full name") }}
+              {% for e in form.full_name.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="col-sm-6">
+              {{ form.location.label(class="form-label") }}
+              {{ form.location(class="form-control", placeholder="City, Country") }}
+            </div>
+            <div class="col-12">
+              {{ form.bio.label(class="form-label") }}
+              {{ form.bio(class="form-control", rows="3", placeholder="A short bio about yourself…") }}
+            </div>
+            <div class="col-sm-6">
+              {{ form.education_level.label(class="form-label") }}
+              {{ form.education_level(class="form-select") }}
+            </div>
+            <div class="col-sm-6">
+              {{ form.field_of_study.label(class="form-label") }}
+              {{ form.field_of_study(class="form-control", placeholder="e.g. Computer Science") }}
+            </div>
+            <div class="col-12">
+              {{ form.career_goal.label(class="form-label") }}
+              {{ form.career_goal(class="form-control", placeholder="e.g. Become a Python Developer at a tech startup") }}
+            </div>
+            <div class="col-sm-6">
+              {{ form.linkedin_url.label(class="form-label") }}
+              {{ form.linkedin_url(class="form-control" + (" is-invalid" if form.linkedin_url.errors else ""), placeholder="https://linkedin.com/in/…") }}
+              {% for e in form.linkedin_url.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="col-sm-6">
+              {{ form.github_url.label(class="form-label") }}
+              {{ form.github_url(class="form-control" + (" is-invalid" if form.github_url.errors else ""), placeholder="https://github.com/…") }}
+              {% for e in form.github_url.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="col-12 d-flex gap-3 mt-2">
+              {{ form.submit(class="btn btn-accent") }}
+              <a href="{{ url_for('dashboard.index') }}" class="btn btn-outline-light">Cancel</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

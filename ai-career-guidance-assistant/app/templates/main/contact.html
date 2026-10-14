@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Contact Us — AI Career Guidance Assistant{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <div class="section-badge">Get In Touch</div>
+    <h1 class="section-title mt-2">Contact Us</h1>
+    <p class="text-muted mt-2">Have a question, suggestion, or feedback? We'd love to hear from you.</p>
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="glass-card">
+        <form method="POST" action="{{ url_for('main.contact') }}" novalidate>
+          {{ form.hidden_tag() }}
+          <div class="row g-3">
+            <div class="col-sm-6">
+              {{ form.name.label(class="form-label") }}
+              {{ form.name(class="form-control" + (" is-invalid" if form.name.errors else ""), placeholder="Your name") }}
+              {% for e in form.name.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="col-sm-6">
+              {{ form.email.label(class="form-label") }}
+              {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else ""), placeholder="you@email.com") }}
+              {% for e in form.email.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="col-12">
+              {{ form.subject.label(class="form-label") }}
+              {{ form.subject(class="form-control" + (" is-invalid" if form.subject.errors else ""), placeholder="Subject") }}
+              {% for e in form.subject.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="col-12">
+              {{ form.message.label(class="form-label") }}
+              {{ form.message(class="form-control" + (" is-invalid" if form.message.errors else ""), rows="6", placeholder="Your message (at least 20 characters)…") }}
+              {% for e in form.message.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="col-12">
+              {{ form.submit(class="btn btn-accent w-100") }}
+            </div>
+          </div>
+        </form>
+      </div>
+      <p class="small text-muted text-center mt-3">
+        <i class="bi bi-info-circle me-1"></i>
+        This is a student project. Response times may vary. For urgent matters, please check the
+        <a href="{{ url_for('main.about') }}" class="text-accent">About page</a>.
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

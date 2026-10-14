@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}My Roadmaps — Dashboard{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h1 class="section-title">My Learning Roadmaps</h1>
+    <p class="text-muted mt-1">Track your progress across all enrolled roadmaps.</p>
+  </div>
+</div>
+<div class="container py-5">
+  {% if roadmaps_list %}
+  <div class="row g-4">
+    {% for item in roadmaps_list %}
+    <div class="col-md-6">
+      <div class="glass-card">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <h5 class="fw-bold mb-0">{{ item.roadmap.career.title }}</h5>
+          <span class="badge-demand badge-{{ 'high' if item.pct >= 60 else ('medium' if item.pct > 0 else 'low') }}">
+            {{ item.pct }}%
+          </span>
+        </div>
+        <p class="text-muted small mb-3">{{ item.done }} / {{ item.total }} stages completed</p>
+        <div class="progress mb-3" style="height:8px;">
+          <div class="progress-bar" data-width="{{ item.pct }}%" style="width:{{ item.pct }}%;"></div>
+        </div>
+        <a href="{{ url_for('roadmaps.view', career_slug=item.roadmap.career.slug) }}" class="btn btn-outline-accent btn-sm">
+          Continue <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="glass-card text-center py-5">
+    <i class="bi bi-map fs-1 text-accent mb-3 d-block"></i>
+    <h5 class="fw-bold">No roadmaps started yet</h5>
+    <p class="text-muted">Browse career roadmaps and start tracking your progress.</p>
+    <a href="{{ url_for('roadmaps.index') }}" class="btn btn-accent">Explore Roadmaps</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

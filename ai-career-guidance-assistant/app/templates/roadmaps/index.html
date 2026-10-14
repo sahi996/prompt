@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Learning Roadmaps — AI Career Guidance Assistant{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <div class="section-badge">Learning Paths</div>
+    <h1 class="section-title mt-2">Career Learning Roadmaps</h1>
+    <p class="text-muted mt-2" style="max-width:600px;">
+      Structured, stage-by-stage learning paths with free resources, exercises, and progress tracking.
+    </p>
+  </div>
+</div>
+<div class="container py-5">
+  {% if not current_user.is_authenticated %}
+  <div class="alert alert-info mb-4">
+    <i class="bi bi-person-lock me-2"></i>
+    <a href="{{ url_for('auth.register') }}" class="alert-link">Create an account</a>
+    to track your roadmap progress and pick up where you left off.
+  </div>
+  {% endif %}
+
+  {% if careers %}
+  <div class="row g-4">
+    {% for career in careers %}
+    <div class="col-sm-6 col-lg-4">
+      <div class="career-card">
+        <div class="card-body">
+          <div class="career-card-icon"><i class="bi {{ career.icon or 'bi-briefcase' }}"></i></div>
+          <h5 class="fw-bold mb-1">{{ career.title }}</h5>
+          <div class="text-muted small mb-2">
+            {{ career.roadmap.stages|length }} stages ·
+            {{ career.roadmap.estimated_weeks }} weeks estimated
+          </div>
+          <p class="text-muted small mb-3">{{ career.roadmap.description }}</p>
+          <a href="{{ url_for('roadmaps.view', career_slug=career.slug) }}" class="btn btn-accent w-100 btn-sm">
+            <i class="bi bi-map me-2"></i>View Roadmap
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="glass-card text-center py-5">
+    <p class="text-muted">No roadmaps available yet. Run <code>flask seed-db</code> to populate the database.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Resume Drafts — Dashboard{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h1 class="section-title">Resume Drafts</h1>
+        <p class="text-muted mt-1">Save and manage your resume content. Always verify before submitting.</p>
+      </div>
+      <a href="{{ url_for('dashboard.edit_resume') }}" class="btn btn-accent">
+        <i class="bi bi-plus me-1"></i>New Draft
+      </a>
+    </div>
+  </div>
+</div>
+<div class="container py-5">
+  <div class="alert alert-warning mb-4">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    <strong>Important:</strong> Never include qualifications, certifications, or work experience you do not actually have.
+    Resume content saved here is a draft — always review and verify before submitting to any employer.
+  </div>
+  {% if drafts %}
+  <div class="row g-4">
+    {% for draft in drafts %}
+    <div class="col-md-6">
+      <div class="glass-card">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <h5 class="fw-bold mb-0">{{ draft.title }}</h5>
+          <span class="text-muted small">{{ draft.updated_at.strftime('%b %d, %Y') }}</span>
+        </div>
+        {% if draft.target_career %}
+        <div class="small text-muted mb-3"><i class="bi bi-briefcase me-1"></i>{{ draft.target_career }}</div>
+        {% endif %}
+        <div class="d-flex gap-2">
+          <a href="{{ url_for('dashboard.edit_resume', draft_id=draft.id) }}" class="btn btn-outline-accent btn-sm flex-grow-1">
+            <i class="bi bi-pencil me-1"></i>Edit
+          </a>
+          <form method="POST" action="{{ url_for('dashboard.delete_resume', draft_id=draft.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <button type="submit" class="btn btn-outline-light btn-sm" onclick="return confirm('Delete this draft?')">
+              <i class="bi bi-trash"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="glass-card text-center py-5">
+    <i class="bi bi-file-earmark-plus fs-1 text-accent mb-3 d-block"></i>
+    <h5 class="fw-bold">No drafts yet</h5>
+    <p class="text-muted">Create your first resume draft to get started.</p>
+    <a href="{{ url_for('dashboard.edit_resume') }}" class="btn btn-accent">Create Draft</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

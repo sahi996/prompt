@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% block title %}About & SDG 8 — AI Career Guidance Assistant{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div class="container">
+    <div class="section-badge">About the Project</div>
+    <h1 class="section-title mt-2">AI Career Guidance Assistant</h1>
+    <p class="text-muted mt-2" style="max-width:600px;">
+      A student project aligned with UN Sustainable Development Goal 8 —
+      Decent Work and Economic Growth.
+    </p>
+  </div>
+</div>
+
+<div class="container py-5">
+
+  <!-- Mission -->
+  <div class="row gy-4 mb-5">
+    <div class="col-lg-6">
+      <div class="section-badge">Our Mission</div>
+      <h2 class="section-title mt-2">Bridging the Career Guidance Gap</h2>
+      <p class="text-muted mt-3">
+        Millions of students and fresh graduates worldwide struggle to navigate career choices.
+        Without personalised guidance, many make decisions based on limited information, leading
+        to skills mismatches and prolonged unemployment.
+      </p>
+      <p class="text-muted">
+        This platform provides free, AI-assisted career exploration, skill development resources,
+        and job preparation tools — helping anyone with internet access take their first confident
+        steps toward meaningful employment.
+      </p>
+    </div>
+    <div class="col-lg-5 offset-lg-1">
+      <div class="glass-card h-100">
+        <h5 class="fw-bold mb-4"><i class="bi bi-bullseye text-accent me-2"></i>SDG 8 Targets Addressed</h5>
+        <ul class="list-unstyled d-flex flex-column gap-3">
+          {% set targets = [
+            ("8.5", "Achieve full and productive employment and decent work for all"),
+            ("8.6", "Reduce the proportion of youth not in employment, education or training"),
+            ("8.b", "Develop a global strategy for youth employment"),
+          ] %}
+          {% for code, label in targets %}
+          <li class="d-flex gap-3 align-items-start">
+            <span class="badge-demand badge-high mt-1 flex-shrink-0">{{ code }}</span>
+            <span class="text-muted small">{{ label }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider-gradient"></div>
+
+  <!-- Lean Canvas -->
+  <div class="mb-5">
+    <div class="text-center mb-4">
+      <div class="section-badge">Project Plan</div>
+      <h2 class="section-title mt-2">Lean Canvas</h2>
+      <p class="small text-muted mt-2">
+        This canvas describes the project's current capabilities and possible future directions.
+        Revenue and partnerships shown below are <em>illustrative future possibilities only</em> —
+        they do not currently exist.
+      </p>
+    </div>
+
+    <div class="lean-canvas">
+      <div class="row g-0">
+        <!-- Row 1 -->
+        <div class="col-md-4 lean-cell">
+          <h6><i class="bi bi-exclamation-triangle me-2"></i>1. Problem</h6>
+          <ul class="small text-muted ps-3">
+            <li>Career confusion and lack of personalised guidance</li>
+            <li>Unclear link between studies and job-market skills</li>
+            <li>Limited access to free, structured career resources</li>
+          </ul>
+        </div>
+        <div class="col-md-4 lean-cell">
+          <h6><i class="bi bi-lightbulb me-2"></i>4. Solution</h6>
+          <ul class="small text-muted ps-3">
+            <li>AI-assisted career assessment and recommendations</li>
+            <li>Skill gap analysis with prioritised learning plans</li>
+            <li>Structured roadmaps and project ideas</li>
+            <li>Resume and interview preparation tools</li>
+          </ul>
+        </div>
+        <div class="col-md-4 lean-cell">
+          <h6><i class="bi bi-star me-2"></i>3. Unique Value Proposition</h6>
+          <p class="small text-muted">
+            One free platform for personalised career exploration, skill development, and job
+            preparation — designed specifically for students and fresh graduates.
+          </p>
+        </div>
+      </div>
+      <div class="row g-0">
+        <div class="col-md-4 lean-cell">
+          <h6><i class="bi bi-people me-2"></i>2. Customer Segments</h6>
+          <ul class="small text-muted ps-3">
+            <li>University and college students</li>
+            <li>Recent graduates seeking first jobs</li>
+            <li>Internship seekers</li>
+            <li>Career changers and self-learners</li>
+          </ul>
+        </div>
+        <div class="col-md-4 lean-cell">
+          <h6><i class="bi bi-broadcast me-2"></i>5. Channels</h6>
+          <ul class="small text-muted ps-3">
+            <li>Public website (this platform)</li>
+            <li>College and university placement cells</li>
+            <li>Student communities and social media</li>
+            <li>Open-source promotion on GitHub</li>
+          </ul>
+        </div>
+        <div class="col-md-4 lean-cell">
+          <h6><i class="bi bi-shield-check me-2"></i>9. Unfair Advantage</h6>
+          <p class="small text-muted">
+            Potential to offer a student-focused, locally relevant, integrated experience.
+            <em>This advantage is not yet proven and will require user validation.</em>
+          </p>
+        </div>
+      </div>
+      <div class="row g-0">
+        <div class="col-md-4 lean-cell">
+          <h6><i class="bi bi-cash-stack me-2"></i>6. Revenue Streams <span class="badge badge-low ms-1" style="font-size:.65rem;">Future / Hypothetical</span></h6>
+          <ul class="small text-muted ps-3">
+            <li>Freemium premium features (possible future)</li>
+            <li>Institutional subscriptions for colleges (possible future)</li>
+            <li>Training partnerships (possible future)</li>
+          </ul>
+        </div>
+        <div class="col-md-4 lean-cell">
+          <h6><i class="bi bi-bar-chart me-2"></i>8. Key Metrics</h6>
+          <ul class="small text-muted ps-3">
+            <li>User registrations</li>
+            <li>Completed assessments</li>
+            <li>Roadmap stages marked complete</li>
+            <li>User satisfaction feedback</li>
+          </ul>
+        </div>
+        <div class="col-md-4 lean-cell">
+          <h6><i class="bi bi-receipt me-2"></i>7. Cost Structure</h6>
+          <ul class="small text-muted ps-3">
+            <li>Hosting (Render free tier)</li>
+            <li>Database (PostgreSQL)</li>
+            <li>AI API usage (optional, pay-per-use)</li>
+            <li>Development and maintenance time</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider-gradient"></div>
+
+  <!-- Tech stack -->
+  <div class="row gy-4 mb-5">
+    <div class="col-lg-12 text-center mb-3">
+      <div class="section-badge">Technology</div>
+      <h2 class="section-title mt-2">Built With</h2>
+    </div>
+    {% set stack = [
+      ("bi-filetype-py", "Python & Flask", "Backend web framework"),
+      ("bi-database", "SQLAlchemy + PostgreSQL", "Database and ORM"),
+      ("bi-bootstrap", "Bootstrap 5", "Responsive UI framework"),
+      ("bi-robot", "OpenAI API (optional)", "AI-powered explanations"),
+      ("bi-git", "Git & GitHub", "Version control"),
+      ("bi-cloud-upload", "Render", "Cloud hosting & HTTPS"),
+    ] %}
+    {% for icon, title, desc in stack %}
+    <div class="col-sm-6 col-lg-4">
+      <div class="d-flex align-items-center gap-3 glass-card p-3">
+        <div class="feature-icon mb-0" style="width:44px;height:44px;flex-shrink:0;">
+          <i class="bi {{ icon }}"></i>
+        </div>
+        <div>
+          <div class="fw-semibold small">{{ title }}</div>
+          <div class="text-muted" style="font-size:.78rem;">{{ desc }}</div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="alert alert-info">
+    <i class="bi bi-info-circle me-2"></i>
+    <strong>Disclaimer:</strong> Career recommendations provided by this platform are for
+    informational and educational purposes only. They do not guarantee employment, represent
+    a scientifically validated assessment, or constitute professional career counselling.
+    Skill requirements vary widely by employer, region, and industry. Always verify information
+    with current job postings and professional advisors.
+  </div>
+
+</div>
+{% endblock %}
