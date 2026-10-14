@@ -25,8 +25,6 @@ def create_app(config_class=None):
     migrate.init_app(app, db)
     limiter.init_app(app)
 
-   
-
     # ── User loader ──────────────────────────────────────────────────────────
     from app.models import User
 
