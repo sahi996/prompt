@@ -25,6 +25,8 @@ def create_app(config_class=None):
     migrate.init_app(app, db)
     limiter.init_app(app)
 
+   
+
     # ── User loader ──────────────────────────────────────────────────────────
     from app.models import User
 
@@ -154,6 +156,3 @@ def _register_error_handlers(app):
         app.logger.error("500 error: %s", e)
         return render_template("errors/500.html"), 500
 
-
-with app.app_context():
-    db.create_all()
